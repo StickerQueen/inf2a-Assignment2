@@ -26,11 +26,13 @@ class FactBase:
       self.unaries = {}
 
     def addUnary(self, pred, e1):
+      """adds a unary predicate to a list and stores the subject"""
       if not pred in self.unaries.keys():
         self.unaries[pred] = []
       self.unaries[pred].append(e1)
 
     def queryUnary(self, pred, e1):
+      """returns whether or not a fact has been stored"""
       if not pred in self.unaries.keys():
         return False
       if e1 in self.unaries[pred]:
@@ -38,11 +40,13 @@ class FactBase:
       return False
    
     def addBinary(self, pred, e1, e2):
+      """adds a binary predicate to a list and stores the subjects"""
       if not pred in self.binaries.keys():
         self.binaries[pred] = []
       self.binaries[pred].append((e1,e2))
 
     def queryBinary(self, pred, e1, e2):
+      """returns whether or not a fact has been stored"""
       if not pred in self.binaries.keys():
         return False
       if (e1,e2) in self.binaries[pred]:
@@ -52,7 +56,23 @@ import re
 
 def verb_stem(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
-    # add code here
+    cases = 'zsxchshosszz'
+    if re.match('.*s', '.*s'):
+      if re.match('(unt|.)ies', s):
+        s = s[:-1]
+      elif re.match('.*ies', s):
+        s = s[:-3]+'y'
+      elif re.match('.*es', s):
+        if re.match('.*([ox]|ch|sh|ss|zz)es', s):
+          s = s[:-2]
+        elif re.match('.*[zs]es',s):
+          s = s[:-1]
+        elif re.match('.*[^i]es',s):
+          s = s[:-1]
+      if s == 'has':
+        s = 'have'
+      
+    return s
 
 def add_proper_name (w,lx):
     """adds a name to a lexicon, checking if first letter is uppercase"""
