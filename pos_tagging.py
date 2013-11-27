@@ -31,6 +31,27 @@ def noun_stem (s):
  
 def tag_word (wd,lx):
     """returns a list of all possible tags for wd relative to lx"""
+    tag_list = []
+    for tag in ['P','A']:
+      if wd in lx.getAll(tag):
+        tag_list.append(tag)
+    if noun_stem(wd) in lx.getAll('N'):
+      if noun_stem(wd) == wd:
+        tag_list.append('Ns')
+        if wd in identical_plurals:
+          tag_list.append('Np')
+      else:
+        tag_list.append('Np')
+    for tag in ['I','T']:
+      if verb_stem(wd) in lx.getAll(tag):
+        if verb_stem(wd) == wd:
+          tag_list.append(tag+'p')
+        else:
+          tag_list.append(tag+'s')
+    for funcW in tagged_function_words:
+      if funcW[0] == wd:
+        tag_list.append(funcW[1])
+    return tag_list
 
 def tag_words (wds,lx):
     """returns a list of all possible taggings for a list of words"""

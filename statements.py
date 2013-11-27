@@ -52,7 +52,7 @@ import re
 
 def verb_stem(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
-    if re.match('.*s', '.*s'):
+    if re.match('.*s', s):
       if re.match('(unt|.)ies', s):
         s = s[:-1]
       elif re.match('.*ies', s):
