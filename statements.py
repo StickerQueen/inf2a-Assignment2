@@ -21,7 +21,32 @@ class Lexicon:
 
 class FactBase:
     """stores unary and binary relational facts"""
+    def __init__(self):
+      self.binaries = {}
+      self.unaries = {}
 
+    def addUnary(self, pred, e1):
+      if not pred in self.unaries.keys():
+        self.unaries[pred] = []
+      self.unaries[pred].append(e1)
+
+    def queryUnary(self, pred, e1):
+      if not pred in self.unaries.keys():
+        return False
+      if e1 in self.unaries[pred]:
+        return True
+      return False
+   
+    def addBinary(self, pred, e1, e2):
+      if not pred in self.binaries.keys():
+        self.binaries[pred] = []
+      self.binaries[pred].append((e1,e2))
+
+    def queryBinary(self, pred, e1, e2):
+      if not pred in self.binaries.keys():
+        return False
+      if (e1,e2) in self.binaries[pred]:
+        return True
 
 import re
 
