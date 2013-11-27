@@ -1,7 +1,3 @@
-def add(item,lst):
-    if (item not in lst):
-        lst.insert(len(lst),item)
-
 class Lexicon:
     """stores known word stems of various part-of-speech categories"""
     def __init__(self):
@@ -56,7 +52,6 @@ import re
 
 def verb_stem(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
-    cases = 'zsxchshosszz'
     if re.match('.*s', '.*s'):
       if re.match('(unt|.)ies', s):
         s = s[:-1]
@@ -69,9 +64,10 @@ def verb_stem(s):
           s = s[:-1]
         elif re.match('.*[^i]es',s):
           s = s[:-1]
+      else:
+        s = s[:-1]
       if s == 'has':
         s = 'have'
-      
     return s
 
 def add_proper_name (w,lx):
