@@ -77,9 +77,9 @@ def top_level_rule(tr):
 
 def N_phrase_num(tr):
     """returns the number attribute of a noun-like tree, based on its head noun"""
-    if (tr.node == 'N'):
+    if tr.node == 'N':
         ret = tr[0][1]  # the s or p from Ns or Np
-    elif (tr.node == 'Nom'): 
+    elif tr.node == 'Nom': 
         ret = N_phrase_num(tr[0])
     elif tr.node == 'AN':
       if tr[0].node == 'A':
@@ -99,9 +99,24 @@ def N_phrase_num(tr):
 def V_phrase_num(tr):
     """returns the number attribute of a verb-like tree, based on its head verb,
        or '' if this is undetermined."""
-    if (tr.node == 'T' or tr.node == 'I'):
-        return tr[0][1]  # the s or p from Is,Ts or Ip,Tp
-    #elif  # add code here
+    ret = ''
+    if tr.node == 'T' or tr.node == 'I':
+        ret = tr[0][1]  # the s or p from Is,Ts or Ip,Tp
+    elif tr.node == 'BE' or tr.node == 'DO':
+      ret = tr[0][2]
+    elif tr.node == 'VP':
+      ret = V_phrase_num(tr[0])
+    elif tr.node == 'QP':
+      if len(tr) == 1:
+        ret = V_phrase_num(tr[0])
+      else:
+        ret = ''
+    elif tr.node == 'Rel':
+      if tr[0].node == 'WHO':
+        ret =  V_phrase_num(tr[1])
+      else:
+        ret = ''
+    return ret
 
 def matches(n1,n2):
     return (n1==n2 or n1=='' or n2=='')
@@ -109,9 +124,10 @@ def matches(n1,n2):
 def check_node(tr):
     """checks agreement constraints at the root of tr"""
     rule = top_level_rule(tr)
-    if (rule == 'S -> WHICH Nom QP QM'):
-        return (matches (N_phrase_num(tr[1]), V_phrase_num(tr[2])))
-    #elif  # add code here
+    ret = ''
+    if rule == 'S -> WHICH Nom QP QM':
+        ret = (matches (N_phrase_num(tr[1]), V_phrase_num(tr[2])))
+#    elif 
 
 def check_all_nodes(tr):
     """checks agreement constraints everywhere in tr"""
