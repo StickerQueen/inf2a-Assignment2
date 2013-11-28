@@ -77,6 +77,7 @@ def top_level_rule(tr):
 
 def N_phrase_num(tr):
     """returns the number attribute of a noun-like tree, based on its head noun"""
+    ret = ''
     if tr.node == 'N':
         ret = tr[0][1]  # the s or p from Ns or Np
     elif tr.node == 'Nom': 
@@ -124,10 +125,19 @@ def matches(n1,n2):
 def check_node(tr):
     """checks agreement constraints at the root of tr"""
     rule = top_level_rule(tr)
-    ret = ''
+    ret = True
     if rule == 'S -> WHICH Nom QP QM':
         ret = (matches (N_phrase_num(tr[1]), V_phrase_num(tr[2])))
-#    elif 
+    elif rule == 'QP -> DO NP T':
+      ret = (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
+    elif rule == 'VP -> VP AND VP':
+      ret = (matches (V_phrase_num(tr[0]), V_phrase_num(tr[2])))
+    elif rule == 'VP -> BE NP':
+      ret = (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
+    elif rule == 'Nom -> AN Rel':
+      ret = (matches (N_phrase_num(tr[0]), V_phrase_num(tr[1])))
+    return ret
+
 
 def check_all_nodes(tr):
     """checks agreement constraints everywhere in tr"""
@@ -178,5 +188,4 @@ def restore_words(tr,wds):
 # tr0 = all_valid_parses(['Who','likes','John','?'],lx)[0]
 # tr.draw()
 # tr = restore_words(tr0,['Who','likes','John','?'])
-
-# End of PART C.
+22e_num(tr[1]), V_phrase_num(tr[2])
