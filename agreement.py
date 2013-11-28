@@ -78,8 +78,23 @@ def top_level_rule(tr):
 def N_phrase_num(tr):
     """returns the number attribute of a noun-like tree, based on its head noun"""
     if (tr.node == 'N'):
-        return tr[0][1]  # the s or p from Ns or Np
-    #elif  # add code here
+        ret = tr[0][1]  # the s or p from Ns or Np
+    elif (tr.node == 'Nom'): 
+        ret = N_phrase_num(tr[0])
+    elif tr.node == 'AN':
+      if tr[0].node == 'A':
+        ret = N_phrase_num(tr[1])
+      else:
+        ret = N_phrase_num(tr[0])
+    elif tr.node == 'NP':
+      if len(tr) == 1:
+        ret = N_phrase_num(tr[0])
+      elif len(tr) == 2:
+        ret = N_phrase_num(tr[1])
+    elif tr.node == 'P': # I added this clause because I was unsure what to do in this eventuallity
+      ret = 's'
+    return ret
+
 
 def V_phrase_num(tr):
     """returns the number attribute of a verb-like tree, based on its head verb,
